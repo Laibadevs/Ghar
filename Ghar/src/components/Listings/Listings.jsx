@@ -1,18 +1,86 @@
 import { useState, useEffect, useRef } from 'react'
 import listing1 from '../../assets/listing1.png'
-import listing2 from '../../assets/listing1.png'
-import listing3 from '../../assets/listing1.png'
-
+import listing2 from '../../assets/listing2.png'
+import listing3 from '../../assets/listing3.png'
+import { motion } from "framer-motion";
+import {
+  Wifi,
+  UtensilsCrossed,
+  CookingPot,
+  Snowflake,
+  BookOpen,
+  WashingMachine,
+} from "lucide-react";
 const CARDS = [
-  { id:1, name:'Students Inn',  location:'Gulshan Town, Lahore',      walk:'7 min walk to UET',   type:'Private Room', price:'Rs. 20,000', amenities:['Wifi','Meals','Kitchen','Laundary'], verified:true,  bgFrom:'#8B6914', bgTo:'#514c26' },
-  { id:2, name:'Girls Hostel',  location:'North Nazimabad, Karachi',  walk:'7 min walk to FAST',  type:'Shared Room',  price:'Rs. 12,000', amenities:['Wifi','Meals','AC','S.Room'],        verified:true,  bgFrom:'#2d8a6a', bgTo:'#1a4a3a' },
-  { id:3, name:'Prime Room',    location:'North Nazimabad, Karachi',  walk:'7 min walk to FAST',  type:'Entire Place', price:'Rs. 25,000', amenities:['Wifi','Meals','AC','Laundary'],        verified:false, bgFrom:'#4a3020', bgTo:'#2f1a1f' },
-]
+  { id:1,
+    name:'Students Inn',  
+    location:'Gulshan Town, Lahore',      
+    walk:'7 min walk to UET',   
+    type:'Private Room',
+    price:'Rs. 20,000', 
+    amenities:['Wifi','Meals','Kitchen','Laundary'], 
+    verified:true,  bgFrom:'#BE976E', bgTo:'#5F3E2E',
+    image:listing1 },
 
+  { id:2, 
+    name:'Girls Hostel',
+    location:'North Nazimabad, Karachi',  
+    walk:'7 min walk to FAST',  
+    type:'Shared Room',  
+    price:'Rs. 12,000', 
+    amenities:['Wifi','Meals','AC','S.Room'],
+    verified:true,  bgFrom:'#BE976E', bgTo:'#584633',
+    image:listing2 },
+  { id:3, name:'Prime Room',    
+    location:'North Nazimabad, Karachi',  
+    walk:'7 min walk to FAST',  
+    type:'Entire Place', 
+    price:'Rs. 25,000', 
+    amenities:['Wifi','Meals','AC','Laundary'],        
+    verified:false, bgFrom:'#BE976E', bgTo:'#2f1a1f',
+    image:listing3 },
+    { id:4, 
+    name:'Prime Room',    
+    location:'North Nazimabad, Karachi',  
+    walk:'7 min walk to FAST',  
+    type:'Entire Place', 
+    price:'Rs. 25,000', 
+    amenities:['Wifi','Meals','AC','Laundary'],        
+    verified:false, bgFrom:'#BE976E', bgTo:'#2f1a1f',
+    image:listing3 },
+]
+const ICONS = {
+  Wifi: Wifi,
+  Meals: UtensilsCrossed,
+  Kitchen: CookingPot,
+  Laundry: WashingMachine,
+  Laundary: WashingMachine,
+  AC: Snowflake,
+  "Study Room": BookOpen,
+  "S.Room": BookOpen,
+};
+const fade = {
+  initial: {
+    opacity: 0,
+    y: 24
+  },
+  whileInView: {
+    opacity: 1,
+    y: 0
+  },
+  viewport: {
+    once: true,
+    margin: "-80px"
+  },
+  transition: {
+    duration: .6
+  }
+};
 const OFFSETS = [
   {sx:'-200px',sy:'-140px',sr:'-10deg'},
   {sx:'180px', sy:'-120px',sr:'8deg'},
   {sx:'-160px',sy:'150px', sr:'-6deg'},
+   {sx:'-160px',sy:'150px', sr:'-6deg'},
 ]
 
 export default function Listings() {
@@ -30,7 +98,7 @@ export default function Listings() {
   const switchCity = c => { setCity(c); setVis(false); setTick(t=>t+1); setTimeout(()=>setVis(true),60) }
 
   return (
-    <section ref={ref} className="px-20 pt-10 pb-10  mt-8">
+    <motion.section {...fade} ref={ref}     className="max-w-[1600px] mx-auto px-12 py-10">
       {/* Header */}
       <div className="flex items-start justify-between mb-2">
         <div>
@@ -60,53 +128,105 @@ export default function Listings() {
       </div>
 
       {/* Cards */}
-      <div className="grid grid-cols-3 gap-5 mb-8">
-        {CARDS.map((card,i)=>(
-          <div key={`${tick}-${card.id}`}
-            style={{'--sx':OFFSETS[i].sx,'--sy':OFFSETS[i].sy,'--sr':OFFSETS[i].sr, animationDelay:`${i*120}ms`, opacity:vis?undefined:0}}
-            className={vis?'asc':''}>
-            <Card card={card}/>
-          </div>
-        ))}
-      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
+  {CARDS.map((card, i) => (
+    <motion.div
+      key={card.id}
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{
+        duration: 0.5,
+        delay: i * 0.12,
+      }}
+    >
+      <Card card={card} />
+    </motion.div>
+  ))}
+</div>
+      
 
       {/* Bottom stats */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-8">
-          <div className="flex items-center gap-2 font-cardo font-bold text-[1rem]">
+          <motion.div
+  initial={{ opacity: 0, y: 25 }}
+  whileInView={{ opacity: 1, y: 0 }}
+  viewport={{ once: true }}
+  transition={{ duration: 0.5, delay: 0.1 }} className="flex items-center gap-2 font-cardo font-bold text-[1rem]">
             <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M4 28V18l12-10 12 10v10" stroke="#2FA084" strokeWidth="1.8" strokeLinecap="round"/><rect x="12" y="20" width="8" height="8" rx="1" stroke="#2FA084" strokeWidth="1.5"/></svg>
             1,240+ active listings
-          </div>
-          <div className="flex items-center gap-2 font-cardo font-bold text-[1rem]">
+          </motion.div>
+          <motion.div
+  initial={{ opacity: 0, y: 25 }}
+  whileInView={{ opacity: 1, y: 0 }}
+  viewport={{ once: true }}
+  transition={{ duration: 0.5, delay: 0.1 }} className="flex items-center gap-2 font-cardo font-bold text-[1rem]">
             <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M14 3L2 10l12 7 12-7z" stroke="#2FA084" strokeWidth="1.8" strokeLinejoin="round"/><path d="M6 14v7c2.5 2 5.5 3.5 8 3.5s5.5-1.5 8-3.5v-7" stroke="#2FA084" strokeWidth="1.8" strokeLinecap="round"/></svg>
             18 Universities Covered
-          </div>
-          <div className="flex items-center gap-2 font-cardo font-bold text-[1rem]">
+          </motion.div>
+          <motion.div
+  initial={{ opacity: 0, y: 25 }}
+  whileInView={{ opacity: 1, y: 0 }}
+  viewport={{ once: true }}
+  transition={{ duration: 0.5, delay: 0.1 }} className="flex items-center gap-2 font-cardo font-bold text-[1rem]">
             <svg width="22" height="28" viewBox="0 0 22 28" fill="none"><path d="M11 2C6.58 2 3 5.58 3 10c0 5.25 8 18 8 18S19 15.25 19 10c0-4.42-3.58-8-8-8z" stroke="#2FA084" strokeWidth="1.8"/><circle cx="11" cy="10" r="2.5" stroke="#2FA084" strokeWidth="1.5"/></svg>
             All Cities
-          </div>
+          </motion.div>
         </div>
-        <button className="shadow-[0_3px_8px_rgba(0,0,0,0.15)] rounded-[20px] bg-[#2FA084] flex items-center gap-2 px-6 py-3 text-[0.92rem] font-semibold text-white hover:bg-[#1F6F5F] transition-colors">
+        <motion.button
+  initial={{ opacity: 0, y: 25 }}
+  whileInView={{ opacity: 1, y: 0 }}
+  viewport={{ once: true }}
+  transition={{ duration: 0.5, delay: 0.1 }} className="shadow-[0_3px_8px_rgba(0,0,0,0.15)] rounded-[20px] bg-[#2FA084] flex items-center gap-2 px-6 py-3 text-[0.92rem] font-semibold text-white hover:bg-[#1F6F5F] transition-colors">
           Browse all listings
           <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 9h12M10 5l4 4-4 4" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
-        </button>
+        </motion.button>
       </div>
-    </section>
+    </motion.section>
   )
 }
 
 function Card({card}) {
   const [saved,setSaved] = useState(false)
   return (
-    <div className="rounded-[28px] overflow-hidden shadow-[0_4px_16px_rgba(0,0,0,0.2)] cursor-pointer group relative" style={{height:'420px',background:`linear-gradient(160deg,${card.bgFrom},${card.bgTo})`}}>
+      <div className="relative h-[470px] rounded-[28px] overflow-hidden shadow-[0_4px_16px_rgba(0,0,0,0.2)] group cursor-pointer">
+
+    <img
+        src={card.image}
+        alt={card.name}
+        className="absolute inset-0 w-full h-full object-cover"
+    />
+
+    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
       {/* Gradient overlay bottom */}
-      <div className="absolute inset-0 rounded-[28px]" style={{background:`linear-gradient(180deg,transparent 35%,rgba(190,151,110,0.55) 60%,${card.bgTo} 100%)`}}/>
+      <div className="absolute inset-0 rounded-[28px]" style={{background:`linear-gradient(180deg,transparent 40%,rgba(190,151,110,0.55) 60%,${card.bgTo} 180%)`}}/>
       {/* Heart */}
-      <button onClick={()=>setSaved(s=>!s)} className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-white/90 flex items-center justify-center shadow group-hover:scale-110 transition-transform">
-        <svg width="18" height="18" viewBox="0 0 18 18" fill={saved?'#2FA084':'none'}><path d="M9 16S2 11.5 2 6.5A4.5 4.5 0 019 3.5a4.5 4.5 0 017 3c0 5-7 9.5-7 9.5z" stroke="#2FA084" strokeWidth="1.5"/></svg>
+      <button onClick={()=>setSaved(s=>!s)} className="absolute
+top-5
+right-5
+z-20
+transition
+duration-300
+hover:scale-110 ">
+        <svg width="20" height="20" viewBox="0 0 18 18" fill={saved?'white':'none'}><path d="M9 16S2 11.5 2 6.5A4.5 4.5 0 019 3.5a4.5 4.5 0 017 3c0 5-7 9.5-7 9.5z" stroke="white" strokeWidth="1.5"/></svg>
       </button>
       {/* Verified */}
-      {card.verified&&<div className="absolute top-4 left-4 z-10 bg-white/25 backdrop-blur-sm text-white text-[0.72rem] font-semibold px-3 py-1 rounded-xl">Verified</div>}
+      {card.verified&&<div className="absolute
+top-5
+left-5
+z-20
+px-4
+py-2
+rounded-full
+backdrop-blur-xl
+bg-white/10
+border
+border-white/20
+text-white
+text-xs
+font-semibold
+shado">Verified</div>}
       {/* Content */}
       <div className="absolute bottom-0 left-0 right-0 z-10 p-4 flex flex-col gap-3">
         <div>
@@ -124,13 +244,18 @@ function Card({card}) {
           <span className="text-[1.1rem] font-extrabold text-white">{card.price}</span>
           <span className="text-[0.72rem] text-white/70 pt-1">/ month</span>
         </div>
-        <div className="flex items-center gap-4 text-[0.7rem] text-white/90">
-          {card.amenities.map(a=>(
-            <div key={a} className="flex items-center gap-1">
-              <div className="w-4 h-4 rounded-full bg-white/25 flex items-center justify-center text-[9px] text-white">✓</div>{a}
-            </div>
-          ))}
-        </div>
+        <div className="flex flex-wrap gap-4 mt-4">
+  {card.amenities.map((a) => {
+    const Icon = ICONS[a];
+
+    return (
+      <div key={a} className="flex items-center gap-2 text-white text-sm">
+        {Icon && <Icon size={16} />}
+        <span>{a}</span>
+      </div>
+    );
+  })}
+</div>
       </div>
     </div>
   )
