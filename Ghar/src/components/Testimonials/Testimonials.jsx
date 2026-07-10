@@ -1,127 +1,190 @@
-import { useEffect, useRef, useState } from 'react'
-
-const PHOTOS = [
-  { color:'#d4a8a8', initial:'A', delay:0 },
-  { color:'#a8c4d4', initial:'B', delay:150 },
-  { color:'#a8d4b4', initial:'C', delay:300 },
-  { color:'#d4caa8', initial:'D', delay:450 },
-  { color:'#c4a8d4', initial:'E', delay:600 },
-  { color:'#d4b8a8', initial:'F', delay:750 },
-  { color:'#a8d4d4', initial:'G', delay:900 },
-  { color:'#d4a8c4', initial:'H', delay:1050 },
-]
-
+import { motion } from "framer-motion";
+import { Quote, Star } from "lucide-react";
+import s1 from "../../assets/s1.png";
+import s2 from "../../assets/s2.png";
+import s3 from "../../assets/s3.png";
+import s4 from "../../assets/s4.png";
+import s5 from "../../assets/s5.png";
+import s6 from "../../assets/s6.png";
+import s7 from "../../assets/s7.png";
+import s8 from "../../assets/s8.png";
+import s9 from "../../assets/s9.png";
+import s10 from "../../assets/s10.png";
+const fade = {
+  initial: { opacity: 0, y: 24 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, margin: "-80px" },
+  transition: { duration: 0.6 },
+};
+// Scattered top portraits — positions in % (left, top) + size + rotation
+const SCATTER = [
+  { src: s1, left: "2%", top: "0%", w: 110, h: 150, r: -6 },
+  { src: s6, left: "0%", top: "38%", w: 120, h: 160, r: 4 },
+  { src: s3, left: "14%", top: "22%", w: 100, h: 140, r: 5 },
+  { src: s2, left: "26%", top: "4%", w: 110, h: 150, r: -4 },
+  { src: s5, left: "42%", top: "26%", w: 120, h: 160, r: 2 },
+  { src: s7, left: "58%", top: "6%", w: 110, h: 150, r: 3 },
+  { src: s4, left: "72%", top: "0%", w: 110, h: 150, r: -3 },
+  { src: s8, left: "74%", top: "38%", w: 100, h: 140, r: 6 },
+  { src: s9, left: "88%", top: "2%", w: 120, h: 160, r: -5 },
+  { src: s10, left: "90%", top: "42%", w: 110, h: 150, r: 4 },
+];
 const REVIEWS = [
-  { quote:'Ghar helped me find a hostel just 5 minutes away from University. The photos were exactly as shown!', name:'Amber', uni:'Fast University,Lahore', delay:1200 },
-  { quote:'Very easy to use platform. I compared multiple rooms. and found the best one within my budget.',       name:'Laiba', uni:'Lahore College Women University,Lahore', delay:1350 },
-  { quote:'No brokers, direct contact with landlord. Saved time, money and a lot of hassle.',                    name:'Usman', uni:'NUST, Islamabad', delay:1500 },
-]
-
-function Photo({ color, initial, delay, vis, cls='' }) {
+  {
+    text: "Ghar helped me find a hostel just 5 minutes away from University. The photos were exactly as shown!",
+    name: "Amber",
+    role: "Fast University, Lahore",
+    avatar: s2,
+  },
+  {
+    text: "Very easy to use platform. I compared multiple rooms and found the best one within my budget.",
+    name: "Laiba",
+    role: "Lahore College Women University, Lahore",
+    avatar: s5,
+  },
+  {
+    text: "No brokers, direct contact with landlord. Saved time, money and a lot of hassle.",
+    name: "Usman",
+    role: "NUST, Islamabad",
+    avatar: s3,
+  },
+];
+function PopImage({ item, i }) {
   return (
-    <div
-      style={{ animationDelay:`${delay}ms`, opacity: vis ? undefined : 0 }}
-      className={`rounded-[20px] overflow-hidden shadow-[0_4px_10px_rgba(0,0,0,0.18)] flex items-center justify-center font-bold text-white text-xl ${cls} ${vis ? 'api' : ''}`}
-      style={{ background: color, animationDelay:`${delay}ms`, opacity: vis ? undefined : 0 }}
+    <motion.div
+      initial={{ opacity: 0, scale: 0.4, y: 20 }}
+      whileInView={{ opacity: 1, scale: 1, y: 0 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{
+        duration: 0.55,
+        delay: i * 0.08,
+        type: "spring",
+        stiffness: 220,
+        damping: 14,
+      }}
+      whileHover={{ scale: 1.06, rotate: 0, zIndex: 20 }}
+      className="absolute rounded-[22px] overflow-hidden shadow-xl ring-1 ring-black/5"
+      style={{
+        left: item.left,
+        top: item.top,
+        width: item.w,
+        height: item.h,
+        transform: `rotate(${item.r}deg)`,
+      }}
     >
-      {initial}
-    </div>
-  )
+      <img
+        src={item.src}
+        alt="Happy student"
+        loading="lazy"
+        className="h-full w-full object-cover"
+      />
+    </motion.div>
+  );
 }
-
-export default function Testimonials() {
-  const [vis, setVis] = useState(false)
-  const ref = useRef(null)
-
-  useEffect(() => {
-    const ob = new IntersectionObserver(([e]) => { if (e.isIntersecting) setVis(true) }, { threshold: 0.08 })
-    if (ref.current) ob.observe(ref.current)
-    return () => ob.disconnect()
-  }, [])
-
+// Responsive scaled version for mobile — a simple avatar row
+function MobileScatter() {
   return (
-    <section ref={ref} className="px-10 py-12 bg-[#f5f5f3]">
-      {/* Photo mosaic + TESTIMONIALS title */}
-      <div className="flex items-end gap-3 mb-8" style={{ height: '280px' }}>
-        {/* Col 1 — 2 stacked */}
-        <div className="flex flex-col gap-3 h-full">
-          <div style={{ flex:1, background: PHOTOS[0].color, animationDelay:`${PHOTOS[0].delay}ms`, opacity: vis ? undefined : 0 }}
-            className={`w-24 rounded-[18px] shadow-[0_4px_10px_rgba(0,0,0,0.18)] flex items-center justify-center font-bold text-white text-lg ${vis?'api':''}`}>{PHOTOS[0].initial}</div>
-          <div style={{ flex:1, background: PHOTOS[1].color, animationDelay:`${PHOTOS[1].delay}ms`, opacity: vis ? undefined : 0 }}
-            className={`w-24 rounded-[18px] shadow-[0_4px_10px_rgba(0,0,0,0.18)] flex items-center justify-center font-bold text-white text-lg ${vis?'api':''}`}>{PHOTOS[1].initial}</div>
+    <div className="md:hidden flex justify-center flex-wrap gap-3 mb-8">
+      {SCATTER.slice(0, 8).map((it, i) => (
+        <motion.div
+          key={i}
+          initial={{ opacity: 0, scale: 0.4 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true, margin: "-40px" }}
+          transition={{
+            duration: 0.5,
+            delay: i * 0.06,
+            type: "spring",
+            stiffness: 220,
+            damping: 14,
+          }}
+          className="w-14 h-16 rounded-[14px] overflow-hidden shadow-md ring-1 ring-black/5"
+          style={{ transform: `rotate(${it.r}deg)` }}
+        >
+          <img
+            src={it.src}
+            alt="student"
+            loading="lazy"
+            className="h-full w-full object-cover"
+          />
+        </motion.div>
+      ))}
+    </div>
+  );
+}
+const Testimonials = () => {
+  return (
+    <section className="container py-20 md:py-28">
+      {/* Top: scattered portraits + heading */}
+      <div className="relative">
+        {/* Desktop scatter */}
+        <div className="hidden md:block relative h-[280px] w-full">
+          {SCATTER.map((it, i) => (
+            <PopImage key={i} item={it} i={i} />
+          ))}
         </div>
-        {/* Col 2 — tall */}
-        <div style={{ background: PHOTOS[2].color, animationDelay:`${PHOTOS[2].delay}ms`, opacity: vis ? undefined : 0 }}
-          className={`w-24 h-48 rounded-[18px] shadow-[0_4px_10px_rgba(0,0,0,0.18)] flex items-center justify-center font-bold text-white text-lg self-start ${vis?'api':''}`}>{PHOTOS[2].initial}</div>
-        {/* Col 3 — 3 items staggered heights */}
-        <div className="flex items-end gap-3 flex-1">
-          <div style={{ background: PHOTOS[3].color, animationDelay:`${PHOTOS[3].delay}ms`, opacity: vis ? undefined : 0 }}
-            className={`w-24 h-48 rounded-[18px] shadow-[0_4px_10px_rgba(0,0,0,0.18)] flex items-center justify-center font-bold text-white text-lg ${vis?'api':''}`}>{PHOTOS[3].initial}</div>
-          <div style={{ background: PHOTOS[4].color, animationDelay:`${PHOTOS[4].delay}ms`, opacity: vis ? undefined : 0 }}
-            className={`w-28 h-64 rounded-[18px] shadow-[0_4px_10px_rgba(0,0,0,0.18)] flex items-center justify-center font-bold text-white text-lg ${vis?'api':''}`}>{PHOTOS[4].initial}</div>
-          <div style={{ background: PHOTOS[5].color, animationDelay:`${PHOTOS[5].delay}ms`, opacity: vis ? undefined : 0 }}
-            className={`w-24 h-48 rounded-[18px] shadow-[0_4px_10px_rgba(0,0,0,0.18)] flex items-center justify-center font-bold text-white text-lg ${vis?'api':''}`}>{PHOTOS[5].initial}</div>
-        </div>
-        {/* TESTIMONIALS label */}
-        <div className="flex flex-col items-center justify-end pb-2 px-4">
-          <h2 className="font-sans text-[1.8rem] font-semibold text-black">TESTIMONIALS</h2>
-        </div>
-        {/* Col 4 — single */}
-        <div style={{ background: PHOTOS[6].color, animationDelay:`${PHOTOS[6].delay}ms`, opacity: vis ? undefined : 0 }}
-          className={`w-24 h-44 rounded-[18px] shadow-[0_4px_10px_rgba(0,0,0,0.18)] flex items-center justify-center font-bold text-white text-lg self-start ${vis?'api':''}`}>{PHOTOS[6].initial}</div>
-        {/* Col 5 — 2 stacked */}
-        <div className="flex flex-col gap-3 h-full">
-          <div style={{ flex:1, background: PHOTOS[7].color, animationDelay:`${PHOTOS[7].delay}ms`, opacity: vis ? undefined : 0 }}
-            className={`w-24 rounded-[18px] shadow-[0_4px_10px_rgba(0,0,0,0.18)] flex items-center justify-center font-bold text-white text-lg ${vis?'api':''}`}>{PHOTOS[7].initial}</div>
-          <div style={{ flex:1, background: PHOTOS[0].color, animationDelay:`${PHOTOS[0].delay+200}ms`, opacity: vis ? undefined : 0 }}
-            className={`w-24 rounded-[18px] shadow-[0_4px_10px_rgba(0,0,0,0.18)] flex items-center justify-center font-bold text-white text-lg ${vis?'api':''}`}>Z</div>
-        </div>
+        {/* Mobile scatter */}
+        <MobileScatter />
+        {/* Heading */}
+        <motion.div {...fade} className="relative text-center mt-8 md:mt-10">
+          <span className="inline-block text-sm md:text-base font-bold tracking-[0.25em] text-ink">
+            TESTIMONIALS
+          </span>
+          <h2 className="mt-4 font-display text-4xl md:text-6xl leading-[1.05] tracking-tight text-balance">
+            Loved by <span className="text-primary italic">students</span>{" "}
+            across Pakistan
+          </h2>
+          <p className="mt-3 text-muted-foreground text-base md:text-lg">
+            Thousands of Students have already found their perfect place with
+            Ghar
+          </p>
+        </motion.div>
       </div>
-
-      {/* Headline */}
-      <div className="text-center mb-8">
-        <h1 className="font-serif text-[2.8rem] font-normal text-black leading-tight">
-          Loved by <span className="text-[#2FA084]">students</span> across Pakistan
-        </h1>
-        <p className="text-[0.88rem] text-gray-500 mt-2">Thousands of Students have already found their prefect place with Ghar</p>
-      </div>
-
       {/* Review cards */}
-      <div className="grid grid-cols-3 gap-5">
-        {REVIEWS.map((r) => (
-          <div key={r.name}
-            style={{ animationDelay:`${r.delay}ms`, opacity: vis ? undefined : 0 }}
-            className={`bg-white border border-[#2FA084] rounded-2xl shadow-[0_4px_12px_rgba(47,160,132,0.12)] p-6 flex flex-col gap-5
-              hover:shadow-[0_8px_24px_rgba(47,160,132,0.2)] hover:-translate-y-1 transition-all duration-200 cursor-pointer relative
-              ${vis ? 'api' : ''}`}
+      <div className="mt-14 grid gap-6 md:gap-8 sm:grid-cols-2 lg:grid-cols-3">
+        {REVIEWS.map((r, i) => (
+          <motion.article
+            key={i}
+            {...fade}
+            transition={{ ...fade.transition, delay: i * 0.1 }}
+            className="rounded-[22px] border border-primary/25 bg-card p-6 md:p-7 shadow-sm hover:shadow-md transition-shadow flex flex-col"
           >
-            {/* Quote icon */}
-            <svg width="36" height="28" viewBox="0 0 36 28" fill="none">
-              <path d="M0 16h8c0-4.42-3.58-8-8-8v8zM20 16h8c0-4.42-3.58-8-8-8v8z" fill="#2FA084" opacity="0.25"/>
-              <path d="M0 16v12h8V16H0zM20 16v12h8V16H20z" fill="#2FA084"/>
-            </svg>
-            <p className="text-[0.92rem] text-black leading-relaxed font-sans flex-1">{r.quote}</p>
-            {/* Stars */}
-            <div className="flex gap-0.5">
-              {[...Array(5)].map((_,i) => (
-                <svg key={i} width="18" height="18" viewBox="0 0 18 18" fill="#F5A623">
-                  <polygon points="9,1 11,7 17,7 12,11 14,17 9,13 4,17 6,11 1,7 7,7"/>
-                </svg>
+            <Quote
+              className="h-8 w-8 text-primary"
+              strokeWidth={2.5}
+              fill="currentColor"
+            />
+            <p className="mt-4 text-[0.95rem] md:text-base text-foreground/85 leading-relaxed flex-1">
+              {r.text}
+            </p>
+            <div className="mt-5 flex items-center gap-1 text-accent">
+              {Array.from({ length: 5 }).map((_, k) => (
+                <Star
+                  key={k}
+                  className="h-4 w-4"
+                  fill="currentColor"
+                  strokeWidth={0}
+                />
               ))}
             </div>
-            {/* Author */}
-            <div className="flex flex-col gap-0.5 pt-1">
-              <span className="text-[1rem] font-medium text-black">{r.name}</span>
-              <span className="text-[0.72rem] text-gray-400">{r.uni}</span>
+            <div className="mt-5 flex items-center gap-3">
+              <img
+                src={r.avatar}
+                alt={r.name}
+                loading="lazy"
+                className="h-11 w-11 rounded-full object-cover ring-2 ring-primary/20"
+              />
+              <div>
+                <div className="font-semibold text-foreground text-sm">
+                  {r.name}
+                </div>
+                <div className="text-xs text-muted-foreground">{r.role}</div>
+              </div>
             </div>
-            {/* Avatar overlapping bottom */}
-            <div className="absolute -bottom-5 left-6 w-10 h-10 rounded-full border-2 border-white shadow-md flex items-center justify-center text-sm font-bold"
-              style={{ background:'#E1F5EE', color:'#0F6E56' }}>
-              {r.name[0]}
-            </div>
-          </div>
+          </motion.article>
         ))}
       </div>
     </section>
-  )
-}
+  );
+};
+export default Testimonials;
