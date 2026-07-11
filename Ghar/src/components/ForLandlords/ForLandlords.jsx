@@ -1,63 +1,169 @@
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+
+const fade = {
+  initial: { opacity: 0, y: 24 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, margin: "-80px" },
+  transition: { duration: 0.6 },
+};
+
+const fadeDelay = (delay = 0) => ({
+  initial: { opacity: 0, y: 24 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, margin: "-80px" },
+  transition: { duration: 0.6, delay },
+});
+
 export default function ForLandlords() {
   return (
-    <section className="px-10 py-12 bg-white">
-      <div className="flex items-start justify-between gap-8">
+    <section className="w-full  px-4 sm:px-8 md:px-12 lg:px-20 pt-10 sm:pt-12 lg:pt-14 pb-12 sm:pb-14 lg:pb-16">
+      <div className="flex flex-col lg:flex-row items-start gap-10 lg:gap-16">
+        {/* ── LEFT — text ── */}
+        <div className="w-full lg:max-w-[600px] flex flex-col gap-5">
+          {/* FOR LANDLORDS label */}
+          <motion.p
+            {...fade}
+            className="text-[0.88rem] font-bold tracking-wide text-[#2FA084]"
+          >
+            FOR LANDLORDS
+          </motion.p>
 
-        {/* LEFT */}
-        <div className="max-w-[380px] flex flex-col gap-6">
-          <p className="text-[0.82rem] font-bold text-[#2FA084]">FOR LANDLORDS</p>
-          <h1 className="font-serif text-[2.5rem] font-normal text-black leading-tight">
-            Fill your rooms with <span className="text-[#2FA084]">serious students</span> — not 200 random calls.
-          </h1>
-          <p className="text-[0.9rem] text-gray-500 leading-relaxed">
-            List your property for free. We verify it, take real photos, and only forward inquiries from matching students.
-          </p>
-          <button className="shadow-[0_4px_8px_rgba(0,0,0,0.15)] rounded-2xl bg-[#2FA084] flex items-center gap-2 px-6 py-3 text-[0.9rem] font-semibold text-white w-fit hover:bg-[#1F6F5F] transition-colors">
-            List your property
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
-          </button>
+          {/* Headline */}
+          <motion.h1
+            {...fadeDelay(0.1)}
+            className="font-serif text-[2.4rem] sm:text-[2.8rem] lg:text-[3.2rem] font-normal text-black leading-[1.1] tracking-tight"
+          >
+            Fill your rooms with{" "}
+            <span className="text-[#2FA084]">serious students</span> — not 200
+            random calls.
+          </motion.h1>
+
+          {/* Description */}
+          <motion.p
+            {...fadeDelay(0.2)}
+            className="text-[0.92rem] sm:text-[0.95rem] text-gray-400 leading-relaxed max-w-[400px]"
+          >
+            List your property for free. We verify it, take real photos, and
+            only forward inquiries from matching students.
+          </motion.p>
+
+          {/* CTA button */}
+          <motion.div {...fadeDelay(0.3)}>
+            <Link
+              to="/landlords"
+              className="inline-flex items-center gap-3 bg-[#1F6F5F] text-white font-semibold text-[1rem] px-7 py-4 rounded-2xl hover:bg-[#2FA084] transition-colors duration-200 mt-2 w-fit"
+            >
+              List your property
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                <path
+                  d="M3 9h12M10 5l4 4-4 4"
+                  stroke="white"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </Link>
+          </motion.div>
         </div>
 
-        {/* MIDDLE — 2 floating stat cards */}
-        <div className="flex flex-col gap-5">
-          {/* 0% */}
-          <div className="w-48 rounded-[22px] shadow-[0_4px_12px_rgba(47,160,132,0.12)] bg-white border border-[rgba(47,160,132,0.2)] p-5 ab1">
-            <div className="w-10 h-10 rounded-xl bg-[rgba(47,160,132,0.1)] flex items-center justify-center mb-3">
-              <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M4 18L18 4M6 6a2 2 0 100-4 2 2 0 000 4zM16 22a2 2 0 100-4 2 2 0 000 4z" stroke="#2FA084" strokeWidth="1.8" strokeLinecap="round"/></svg>
+        {/* ── RIGHT — 2x2 stat cards ── */}
+        <div className="flex-1 grid grid-cols-2 gap-80 sm:gap-5">
+          {/* Card 1 — 0% Listing Fee */}
+          <motion.div
+            {...fadeDelay(0.2)}
+            className="flex items-start gap-7 bg-white border border-[#2FA084] rounded-2xl px-6 sm:px-8 py-6 sm:py-8
+              shadow-[0_4px_12px_rgba(47,160,132,0.12)] hover:shadow-[0_8px_24px_rgba(47,160,132,0.2)]
+              hover:-translate-y-0.5 transition-all duration-200 cursor-pointer
+              flex-col ab1"
+          >
+            {/* Dot indicator */}
+            <div className="w-8 h-8 rounded-xl bg-[rgba(47,160,132,0.15)] flex items-center justify-center">
+              <div className="w-2.5 h-2.5 rounded-full bg-[#2FA084]" />
             </div>
-            <div className="font-serif text-[3.5rem] font-normal text-[#2FA084] leading-none">0<span className="text-[1.8rem]">%</span></div>
-            <div className="text-[0.72rem] font-semibold text-gray-400 mt-2 tracking-wide">LISTING FEE</div>
-          </div>
-          {/* 5★ */}
-          <div className="w-48 rounded-[22px] shadow-[0_4px_12px_rgba(47,160,132,0.12)] bg-white border border-[rgba(47,160,132,0.2)] p-5 ab2">
-            <div className="w-10 h-10 rounded-xl bg-[rgba(245,166,35,0.15)] flex items-center justify-center mb-3">
-              <svg width="22" height="22" viewBox="0 0 22 22" fill="#F5A623"><polygon points="11,2 13.8,8.3 20.5,9 15.5,13.7 17,20.5 11,17 5,20.5 6.5,13.7 1.5,9 8.2,8.3"/></svg>
+            {/* Number */}
+            <div className="flex items-end gap-1 mt-2">
+              <span className="font-serif text-[3.5rem] sm:text-[4rem] font-normal text-[#2FA084] leading-none">
+                0
+              </span>
+              <span className="font-serif text-[2rem] sm:text-[2.4rem] font-normal text-[#2FA084] leading-none mb-1">
+                %
+              </span>
             </div>
-            <div className="font-serif text-[3.5rem] font-normal text-[#2FA084] leading-none">5</div>
-            <div className="text-[0.72rem] font-semibold text-gray-400 mt-2 tracking-wide">VERIFICATION</div>
-          </div>
-        </div>
+            {/* Label */}
+            <p className="text-[0.72rem] font-bold tracking-widest text-gray-400 uppercase mt-1">
+              Listing Fee
+            </p>
+          </motion.div>
 
-        {/* RIGHT — 2 larger floating stat cards */}
-        <div className="flex flex-col gap-5">
-          {/* 48h — dark green */}
-          <div className="w-48 rounded-[22px] shadow-[0_4px_12px_rgba(47,160,132,0.15)] bg-[#2FA084] p-5 ab3">
-            <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center mb-3">
-              <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="8" stroke="white" strokeWidth="1.8"/><path d="M11 7v4l3 3" stroke="white" strokeWidth="1.8" strokeLinecap="round"/></svg>
+          {/* Card 2 — 48h Avg Inquiry (dark green) */}
+          <motion.div
+            {...fadeDelay(0.3)}
+            className="flex flex-col bg-[#1F6F5F] rounded-2xl px-6 sm:px-8 py-6 sm:py-8
+              shadow-[0_4px_12px_rgba(31,111,95,0.25)] hover:shadow-[0_8px_24px_rgba(31,111,95,0.35)]
+              hover:-translate-y-0.5 transition-all duration-200 cursor-pointer ab3"
+          >
+            {/* Dot indicator */}
+            <div className="w-8 h-8 rounded-xl bg-white/20 flex items-center justify-center mb-4">
+              <div className="w-2.5 h-2.5 rounded-full bg-white/60" />
             </div>
-            <div className="font-serif text-[3rem] font-normal text-white leading-none">48 h</div>
-            <div className="text-[0.72rem] font-semibold text-white/70 mt-2 tracking-wide">AVG. INQUIRY</div>
-          </div>
-          {/* 1.2k+ */}
-          <div className="w-48 rounded-[22px] shadow-[0_4px_12px_rgba(47,160,132,0.12)] bg-white border border-[rgba(47,160,132,0.2)] p-5" style={{animation:'bx1 4.5s ease-in-out infinite 1.2s'}}>
-            <div className="w-10 h-10 rounded-xl bg-[rgba(47,160,132,0.1)] flex items-center justify-center mb-3">
-              <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="8" cy="8" r="3.5" stroke="#2FA084" strokeWidth="1.8"/><path d="M2 20c0-4.42 2.69-8 6-8" stroke="#2FA084" strokeWidth="1.8" strokeLinecap="round"/><circle cx="16" cy="8" r="3.5" stroke="#2FA084" strokeWidth="1.8"/><path d="M20 20c0-4.42-2.69-8-6-8" stroke="#2FA084" strokeWidth="1.8" strokeLinecap="round"/></svg>
+            {/* Number */}
+            <span className="font-serif text-[3.5rem] sm:text-[4rem] font-normal text-white leading-none mt-2">
+              48 h
+            </span>
+            {/* Label */}
+            <p className="text-[0.72rem] font-bold tracking-widest text-white/60 uppercase mt-3">
+              Avg. Inquiry
+            </p>
+          </motion.div>
+
+          {/* Card 3 — 5 Verification */}
+          <motion.div
+            {...fadeDelay(0.4)}
+            className="flex items-start gap-7 bg-white border border-[#2FA084] rounded-2xl px-6 sm:px-8 py-6 sm:py-8
+              shadow-[0_4px_12px_rgba(47,160,132,0.12)] hover:shadow-[0_8px_24px_rgba(47,160,132,0.2)]
+              hover:-translate-y-0.5 transition-all duration-200 cursor-pointer
+              flex-col ab2"
+          >
+            {/* Dot indicator — amber */}
+            <div className="w-8 h-8 rounded-xl bg-[rgba(245,166,35,0.15)] flex items-center justify-center">
+              <div className="w-2.5 h-2.5 rounded-full bg-[#F5A623]" />
             </div>
-            <div className="font-serif text-[3rem] font-normal text-[#2FA084] leading-none">1.2k+</div>
-            <div className="text-[0.72rem] font-semibold text-gray-400 mt-2 tracking-wide">ACTIVE LANDLORDS</div>
-          </div>
+            {/* Number */}
+            <span className="font-serif text-[3.5rem] sm:text-[4rem] font-normal text-[#2FA084] leading-none mt-2">
+              5
+            </span>
+            {/* Label */}
+            <p className="text-[0.72rem] font-bold tracking-widest text-gray-400 uppercase mt-1">
+              Verification
+            </p>
+          </motion.div>
+
+          {/* Card 4 — 1.2k+ Active Landlords */}
+          <motion.div
+            {...fadeDelay(0.5)}
+            className="flex items-start gap-7 bg-white border border-[#2FA084] rounded-2xl px-6 sm:px-8 py-6 sm:py-8
+              shadow-[0_4px_12px_rgba(47,160,132,0.12)] hover:shadow-[0_8px_24px_rgba(47,160,132,0.2)]
+              hover:-translate-y-0.5 transition-all duration-200 cursor-pointer
+              flex-col"
+            style={{ animation: "bx1 4.5s ease-in-out infinite 1.2s" }}
+          >
+            {/* Dot indicator */}
+            <div className="w-8 h-8 rounded-xl bg-[rgba(47,160,132,0.15)] flex items-center justify-center">
+              <div className="w-2.5 h-2.5 rounded-full bg-[#2FA084]" />
+            </div>
+            {/* Number */}
+            <span className="font-serif text-[3.5rem] sm:text-[4rem] font-normal text-[#2FA084] leading-none mt-2">
+              1.2k+
+            </span>
+            {/* Label */}
+            <p className="text-[0.72rem] font-bold tracking-widest text-gray-400 uppercase mt-1">
+              Active Landlords
+            </p>
+          </motion.div>
         </div>
       </div>
     </section>
-  )
+  );
 }
