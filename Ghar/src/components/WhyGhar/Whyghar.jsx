@@ -8,21 +8,20 @@ import {
   ShieldCheck,
   Building2,
 } from "lucide-react";
-
+// Smooth easing curve (easeOutExpo-like) used across room.pk-style reveals
+const EASE = [0.22, 1, 0.36, 1];
 const fade = {
-  initial: { opacity: 0, y: 24 },
+  initial: { opacity: 0, y: 40 },
   whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: "-80px" },
-  transition: { duration: 0.6 },
+  viewport: { once: true, margin: "-100px" },
+  transition: { duration: 0.9, ease: EASE },
 };
-
 const fadeDelay = (delay = 0) => ({
-  initial: { opacity: 0, y: 24 },
+  initial: { opacity: 0, y: 40 },
   whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: "-80px" },
-  transition: { duration: 0.6, delay },
+  viewport: { once: true, margin: "-100px" },
+  transition: { duration: 0.9, ease: EASE, delay },
 });
-
 const FEATURES = [
   {
     icon: MapPin,
@@ -60,7 +59,18 @@ const FEATURES = [
     desc: "Search accommodation by university name, nearby areas, or city to quickly discover rooms near your campus.",
   },
 ];
-
+// Container that staggers children — gives that fluid room.pk cascade feel
+const gridContainer = {
+  initial: {},
+  whileInView: {},
+  viewport: { once: true, margin: "-100px" },
+  transition: { staggerChildren: 0.12, delayChildren: 0.05 },
+};
+const cardVariant = {
+  initial: { opacity: 0, y: 40 },
+  whileInView: { opacity: 1, y: 0 },
+  transition: { duration: 0.9, ease: EASE },
+};
 export default function WhyGhar() {
   return (
     <section className="w-full px-4 sm:px-8 md:px-12 lg:px-20 pt-10 sm:pt-12 lg:pt-14 pb-12 sm:pb-14 lg:pb-16">
@@ -71,9 +81,8 @@ export default function WhyGhar() {
       >
         WHY GHAR
       </motion.p>
-
       <motion.h1
-        {...fadeDelay(0.1)}
+        {...fadeDelay(0.15)}
         className="font-serif text-[2rem] sm:text-[2.4rem] md:text-[2.8rem] lg:text-[3.2rem] font-normal text-black leading-tight mb-8 sm:mb-10 lg:mb-12"
       >
         Everything Facebook groups{" "}
@@ -82,61 +91,54 @@ export default function WhyGhar() {
           <span className="text-black">.</span>
         </span>
       </motion.h1>
-
-      {/* ── All cards — responsive grid ── */}
-      {/* Mobile: 1 col | Tablet: 2 col | Desktop: 3 col */}
-
       {/* Row 1 */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 mb-4 sm:mb-5">
-        {FEATURES.slice(0, 4).map((f, i) => (
-          <FeatureCard key={f.title} f={f} delay={0.15 + i * 0.1} />
+      <motion.div
+        variants={gridContainer}
+        initial="initial"
+        whileInView="whileInView"
+        viewport={{ once: true, margin: "-100px" }}
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 mb-4 sm:mb-5"
+      >
+        {FEATURES.slice(0, 4).map((f) => (
+          <FeatureCard key={f.title} f={f} />
         ))}
-      </div>
-
+      </motion.div>
       {/* Row 2 */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 mb-4 sm:mb-5">
-        {FEATURES.slice(5, 8).map((f, i) => (
-          <FeatureCard key={f.title} f={f} delay={0.25 + i * 0.1} />
+      <motion.div
+        variants={gridContainer}
+        initial="initial"
+        whileInView="whileInView"
+        viewport={{ once: true, margin: "-100px" }}
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 mb-4 sm:mb-5"
+      >
+        {FEATURES.slice(4, 7).map((f) => (
+          <FeatureCard key={f.title} f={f} />
         ))}
-      </div>
-
-      {/* Row 3 — 1 card, left aligned on desktop
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
-        <FeatureCard f={FEATURES[6]} delay={0.35} />
-      </div> */}
+      </motion.div>
     </section>
   );
 }
-
-function FeatureCard({ f, delay }) {
+function FeatureCard({ f }) {
   const Icon = f.icon;
   return (
     <motion.div
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.6, delay }}
+      variants={cardVariant}
       whileHover={{
-        y: -4,
-        boxShadow: "0 8px 24px rgba(47,160,132,0.2)",
-        transition: { duration: 0.2 },
+        y: -6,
+        boxShadow: "0 12px 32px rgba(47,160,132,0.22)",
+        transition: { duration: 0.35, ease: EASE },
       }}
-      className="bg-white border border-gray-100 hover:border-[#2FA084] rounded-[20px] shadow-[2px_4px_16px_rgba(0,0,0,0.06)] px-5 py-6 sm:px-6 sm:py-7 lg:px-8 lg:py-8 flex flex-col gap-4 sm:gap-5 cursor-pointer transition-all duration-200"
+      className="bg-white border border-gray-100 hover:border-[#2FA084] rounded-[20px] shadow-[2px_4px_16px_rgba(0,0,0,0.06)] px-5 py-6 sm:px-6 sm:py-7 lg:px-8 lg:py-8 flex flex-col gap-4 sm:gap-5 cursor-pointer transition-colors duration-300"
     >
-      {/* Icon box */}
       <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-[12px] bg-[rgba(47,160,132,0.12)] flex items-center justify-center">
         <Icon
           className="w-5 h-5 sm:w-6 sm:h-6 text-[#2FA084]"
           strokeWidth={1.6}
         />
       </div>
-
-      {/* Title */}
       <h3 className="font-serif text-[1.15rem] sm:text-[1.25rem] lg:text-[1.35rem] font-normal text-black leading-snug">
         {f.title}
       </h3>
-
-      {/* Description */}
       <p className="text-[0.82rem] sm:text-[0.85rem] lg:text-[0.88rem] text-gray-400 leading-relaxed font-sans">
         {f.desc}
       </p>
