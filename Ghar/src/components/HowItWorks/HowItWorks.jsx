@@ -83,7 +83,7 @@ export default function HowItWorks() {
           {STEPS.map((step, i) => (
             <motion.div
               key={step.num}
-              {...fadeDelay(0.15 + i * 0.15)}
+              {...fadeDelay(0.2 + i * 0.2)}
               className="flex items-start gap-7 bg-white border border-[#2FA084] rounded-2xl px-6 sm:px-8 py-7 sm:py-8
                 shadow-[0_4px_12px_rgba(47,160,132,0.12)] hover:shadow-[0_8px_24px_rgba(47,160,132,0.2)]
                 hover:-translate-y-0.5 transition-all duration-200 cursor-pointer"
